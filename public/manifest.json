@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Surf the Urge",
+    "version": "1.0.0",
+    "description": "Surf the urge of distraction by selecting the amount of time you want to stay focused for.",
+    "action": {
+        "default_popup": "index.html"
+    },
+    "permissions": ["scripting"],
+    "host_permissions": ["<all_urls>"],
+    "icons": {
+        "32": "icon.png"
+    }
+}
