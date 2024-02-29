@@ -12,6 +12,8 @@ function App() {
     const onStart = () => {
       if (currentState === 'START') return
       setCurrentState('START')
+      localStorage.setItem("timerStatus", currentState) 
+      // chrome.storage.local.set({timerStatus: currentState})
       intervalRef.current = setInterval(() => {
         setCurrentTime((currentTime) => currentTime - 50)
       }, 50)
@@ -28,13 +30,12 @@ function App() {
     const onStop = () => {
       if (currentState === 'STOP') return
       setCurrentState('STOP')
+      localStorage.setItem("timerStatus", currentState)
+      // chrome.storage.local.set({timerStatus: currentState})
       clearInterval(intervalRef.current)
+      chrome.alarms.clearAll();
     }
   
-    const onReset = () => {
-      if (currentState === 'RESET') return
-      setCurrentTime(0)
-    }
     
     const sec = Math.floor(currentTime / 1000)
     const min = Math.floor(sec / 60)
@@ -48,19 +49,23 @@ function App() {
           <img src={icon} className="logo" alt="Surf the Urge logo" />
       </div>
       <h1>Surf the Urge</h1>
-      <p>Select the amount of time you want to stay focused for</p>
+
+      {currentState === 'START' ? <p>Time left:</p> : 
       
-      <input type="range" min="1" max="20" value={countdownTime} onChange={(e) => setCountdownTime(parseInt(e.target.value))}></input>
-      <button onClick={onSet}>Set focus time</button>
+      <div>
+        <p>Select the amount of time you want to stay focused for</p>
+        <input type="range" min="1" max="20" value={countdownTime} onChange={(e) => setCountdownTime(parseInt(e.target.value))}></input>
+        <button onClick={onSet}>Set focus time</button>
+      </div>}
+
       <div className="card">
         <div className="timer">
           <span>{minutes}</span>:<span>{seconds}</span>
         </div>
         <button onClick={onStart}>Start</button>
         <button onClick={onStop}>Stop</button>
-        <button onClick={onReset}>Reset</button>
       </div>
-      <p>You will receive an alert if you start focusing on something else or when the time is up</p>
+      <p>You will receive a notification if you start focusing on something else or when the time is up</p>
     </>
   )
 }
