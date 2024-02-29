@@ -6,9 +6,12 @@
     "action": {
         "default_popup": "index.html"
     },
-    "permissions": ["scripting"],
+    "permissions": ["scripting", "notifications", "alarms"],
     "host_permissions": ["<all_urls>"],
     "icons": {
         "32": "icon.png"
+    },
+    "background": {
+    	"service_worker": "js/service-worker.js"
     }
 }

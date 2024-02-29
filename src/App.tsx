@@ -13,8 +13,16 @@ function App() {
       if (currentState === 'START') return
       setCurrentState('START')
       intervalRef.current = setInterval(() => {
-        setCurrentTime((currentTime) => currentTime + 50)
+        setCurrentTime((currentTime) => currentTime - 50)
       }, 50)
+      chrome.alarms.create("time-is-up", {
+        when: Date.now() + (countdownTime * 60 * 1000)
+      })
+    }
+
+    const onSet = () => {
+      if (currentState === 'START') return
+      setCurrentTime(countdownTime * 60 * 1000)
     }
 
     const onStop = () => {
@@ -34,20 +42,6 @@ function App() {
     const minutes =  (min % 60).toString().padStart(2,"0")
 
     
-  // const [colour, setColour] = useState('')
-  // const onclick = async () => {
-  //   console.log(colour)
-  //   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  //   chrome.scripting.executeScript<string[], void>({
-  //     target: { tabId: tab.id! },
-  //     args: [ colour ],
-  //     func: () => {
-  //       document.body.style.backgroundColor = colour 
-  //       alert('Hello World!');
-  //     }
-  //   });
-    
-  // }
   return (
     <>
       <div>
@@ -56,14 +50,17 @@ function App() {
       <h1>Surf the Urge</h1>
       <p>Select the amount of time you want to stay focused for</p>
       
+      <input type="range" min="1" max="20" value={countdownTime} onChange={(e) => setCountdownTime(parseInt(e.target.value))}></input>
+      <button onClick={onSet}>Set focus time</button>
       <div className="card">
-        <button onClick={onStart}>Start</button>
-        <button onClick={onStop}>Stop</button>
-        <button onClick={onReset}>Reset</button>
         <div className="timer">
           <span>{minutes}</span>:<span>{seconds}</span>
         </div>
+        <button onClick={onStart}>Start</button>
+        <button onClick={onStop}>Stop</button>
+        <button onClick={onReset}>Reset</button>
       </div>
+      <p>You will receive an alert if you start focusing on something else or when the time is up</p>
     </>
   )
 }
