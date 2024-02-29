@@ -3,10 +3,11 @@ chrome.alarms.onAlarm.addListener((alarm) => {
         //our alarm is running, send notification
         console.log("Time is up! Your focus time is over.");
         chrome.notifications.create("countdown", {
+            type: 'basic',
             iconUrl: "../icon.png",
             message: 'Time is up! Your focus time is over.',
-            type: 'basic',
             title: 'Surf the Urge',
+            priority: 2
           })
     }
 });
